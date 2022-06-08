@@ -93,8 +93,9 @@ VL53L0X_RangingMeasurementData_t measure;
     
   delay(100);
 
-if(measure.RangeMilliMeter < 100 ) {
+if(measure.RangeMilliMeter < 200 ) {
   stopVehicle();
+  turnLeft();
 }else{
   moveForward();
 }
@@ -115,7 +116,9 @@ void drive(int fL, int fR, int rL, int rR){
 }
 
  void moveForward() {
-  drive(225, 225, LOW, LOW);
+  drive(180, 180, LOW, LOW);
+  delay(100);
+  drive(100, 100, LOW, LOW);
 }
 
  void moveBackwards() {
@@ -127,7 +130,9 @@ void drive(int fL, int fR, int rL, int rR){
  }
 
  void turnLeft() {
-   drive(180, LOW, LOW, LOW);
+   drive(180, LOW, LOW, 180);
+   delay(100);
+   drive(100, LOW, LOW, 100);
  }
 
  void stopVehicle() {
