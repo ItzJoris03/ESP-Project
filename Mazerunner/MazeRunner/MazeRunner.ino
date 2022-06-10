@@ -26,12 +26,11 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
  int forwardRight = 16;
  int reverseLeft = 5;
  int reverseRight = 17;
- const int trigPin = 5;
- const int echoPin = 18;
+ int trigPin = 5;
+ int echoPin = 18;
  long duration;
  float distanceCm;
- float distanceInch;
-
+ 
  void setup() {
    Serial.begin(9600);
 
@@ -67,7 +66,26 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
    int valueLdrLeft = analogRead(ldrLeft);
    int valueLdrRight = analogRead(ldrRight);
 
-
+  // Clears the trigPin
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+  
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(echoPin, HIGH);
+  
+  // Calculate the distance
+  distanceCm = duration * SOUND_SPEED/2;
+  
+  
+  // Prints the distance in the Serial Monitor
+  Serial.print("Zijkant (cm): ");
+  Serial.println(distanceCm);
+  
+  delay(1000);
 
 //   if(valueLdrLeft < 120 && valueLdrRight < 120 ) {
 //      moveForward();
@@ -95,7 +113,7 @@ VL53L0X_RangingMeasurementData_t measure;
   lox.rangingTest(&measure, false); // pass in 'true' to get debug data printout!
 
   if (measure.RangeStatus != 4) {  // phase failures have incorrect data
-    Serial.print("Distance (mm): "); Serial.println(measure.RangeMilliMeter);
+    Serial.print("Voorkant (mm): "); Serial.println(measure.RangeMilliMeter);
   } else {
     Serial.println(" out of range ");
   }
@@ -104,12 +122,14 @@ VL53L0X_RangingMeasurementData_t measure;
 
 if(measure.RangeMilliMeter < 200 ) {
   stopVehicle();
-  turnLeft();
+  turnRight();
 }else{
   moveForward();
 }
 
-
+if(distanceCm > 20){
+  turnLeft();
+}
 
 }
 
