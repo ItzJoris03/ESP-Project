@@ -17,6 +17,8 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
 
  #define LOGO_HEIGHT   16
  #define LOGO_WIDTH    16
+ #define SOUND_SPEED 0.034
+ #define CM_TO_INCH 0.393701
 
  int ldrLeft = 34;
  int ldrRight = 39;
@@ -24,6 +26,11 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
  int forwardRight = 16;
  int reverseLeft = 5;
  int reverseRight = 17;
+ const int trigPin = 5;
+ const int echoPin = 18;
+ long duration;
+ float distanceCm;
+ float distanceInch;
 
  void setup() {
    Serial.begin(9600);
@@ -38,6 +45,8 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
    pinMode(reverseRight, OUTPUT);
    pinMode(ldrLeft, INPUT);
    pinMode(ldrRight, INPUT);
+   pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
+   pinMode(echoPin, INPUT); // Sets the echoPin as an Input
 
    // wait until serial port opens for native USB devices
   while (! Serial) {
