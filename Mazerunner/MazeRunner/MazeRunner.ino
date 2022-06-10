@@ -123,13 +123,13 @@ VL53L0X_RangingMeasurementData_t measure;
 if(measure.RangeMilliMeter < 200 ) {
   stopVehicle();
   turnRight();
+}else if(distanceCm > 20){
+  turnLeft();
 }else{
+}
   moveForward();
 }
 
-if(distanceCm > 20){
-  turnLeft();
-}
 
 }
 
