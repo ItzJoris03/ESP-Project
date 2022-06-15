@@ -66,6 +66,7 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
    int valueLdrLeft = analogRead(ldrLeft);
    int valueLdrRight = analogRead(ldrRight);
 
+//Zijkant ultrasonic sensor
   // Clears the trigPin
   digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
@@ -87,29 +88,9 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
   
   delay(1000);
 
-//   if(valueLdrLeft < 120 && valueLdrRight < 120 ) {
-//      moveForward();
-//   } 
-//
-//   if(valueLdrLeft < 120 && valueLdrRight > 120) {
-//     turnRight();
-//   } 
-//
-//   if(valueLdrLeft > 120 && valueLdrRight < 120) {
-//     turnLeft();   
-//   } 
-//
-//   if (valueLdrLeft > 120 && valueLdrRight > 120){ 
-//     moveBackwards();
-//   }
-//
-//   if(valueLdrLeft == 0 && valueLdrRight == 0){
-//     stopVehicle();
-//   }
-
+// Voorkant afstand sensor
 VL53L0X_RangingMeasurementData_t measure;
     
-  Serial.print("Reading a measurement... ");
   lox.rangingTest(&measure, false); // pass in 'true' to get debug data printout!
 
   if (measure.RangeStatus != 4) {  // phase failures have incorrect data
@@ -118,20 +99,34 @@ VL53L0X_RangingMeasurementData_t measure;
     Serial.println(" out of range ");
   }
     
-  delay(100);
-
-if(measure.RangeMilliMeter < 200 ) {
-  stopVehicle();
-  turnRight();
-}else if(distanceCm > 20){
+if (distanceCm > 10){
   turnLeft();
 }else{
-}
   moveForward();
 }
 
+  //Drive code
 
+//if(measure.RangeMilliMeter < 200 ) {
+//  stopVehicle();
+//  turnRight();
+//}else if(distanceCm > 20){
+//  turnLeft();
+//}else{
+//  moveForward();
+//}
+
+
+
+//if(measure.RangeMilliMeter < 100){
+//  stopVehicle();
+//  turnRight();
+//}else{
+//  moveForward();
+//}
+  
 }
+
 
 
 
@@ -156,6 +151,8 @@ void drive(int fL, int fR, int rL, int rR){
 
  void turnRight() {
    drive(LOW, 180, LOW, LOW);
+   delay(100);
+   drive(LOW, 100, LOW, LOW);
  }
 
  void turnLeft() {
