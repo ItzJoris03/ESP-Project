@@ -18,12 +18,16 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
  int forwardRight = 16;
  int reverseLeft = 5;
  int reverseRight = 17;
- int trigPin = 13;
- int echoPin = 9;
+ const int trigPin = 25;
+ const int echoPin = 26;
+ // defines variables
  long duration;
- float distanceCm;
+ int distance;
  
  void setup() {
+
+   
+  
    Serial.begin(9600);
 
 
@@ -66,17 +70,13 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
   digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
-  
   // Reads the echoPin, returns the sound wave travel time in microseconds
   duration = pulseIn(echoPin, HIGH);
-  
-  // Calculate the distance
-  distanceCm = duration * SOUND_SPEED/2;
-  
-  
-  // Prints the distance in the Serial Monitor
-  Serial.print("Zijkant (cm): ");
-  Serial.println(distanceCm);
+  // Calculating the distance
+  distance = duration * 0.034 / 2;
+  // Prints the distance on the Serial Monitor
+  Serial.print("Distance: ");
+  Serial.println(distance);
   
   delay(1000);
 
@@ -91,7 +91,7 @@ VL53L0X_RangingMeasurementData_t measure;
     Serial.println(" out of range ");
   }
     
-//if (distanceCm > 10){
+//if (distance > 10){
 //  turnLeft();
 //}else{
 //  moveForward();
@@ -99,14 +99,14 @@ VL53L0X_RangingMeasurementData_t measure;
 
   //Drive code
 
-//if(measure.RangeMilliMeter < 200 ) {
-//  stopVehicle();
-//  turnRight();
-//}else if(distanceCm > 20){
-//  turnLeft();
-//}else{
-//  moveForward();
-//}
+if(measure.RangeMilliMeter < 200 ) {
+  stopVehicle();
+  turnRight();
+}else if(distance > 20){
+  turnLeft();
+}else{
+  moveForward();
+}
 
 
 
