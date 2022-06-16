@@ -7,16 +7,8 @@
  #include <Adafruit_VL53L0X.h>
 
 Adafruit_VL53L0X lox = Adafruit_VL53L0X();
+
  
- #define SCREEN_WIDTH 128
- #define SCREEN_HEIGHT 32
- #define OLED_RESET     4
- #define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
-
- Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-
- #define LOGO_HEIGHT   16
- #define LOGO_WIDTH    16
  #define SOUND_SPEED 0.034
  #define CM_TO_INCH 0.393701
 
@@ -26,8 +18,8 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
  int forwardRight = 16;
  int reverseLeft = 5;
  int reverseRight = 17;
- int trigPin = 5;
- int echoPin = 18;
+ int trigPin = 13;
+ int echoPin = 9;
  long duration;
  float distanceCm;
  
@@ -99,11 +91,11 @@ VL53L0X_RangingMeasurementData_t measure;
     Serial.println(" out of range ");
   }
     
-if (distanceCm > 10){
-  turnLeft();
-}else{
-  moveForward();
-}
+//if (distanceCm > 10){
+//  turnLeft();
+//}else{
+//  moveForward();
+//}
 
   //Drive code
 
