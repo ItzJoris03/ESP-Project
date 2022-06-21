@@ -93,33 +93,30 @@ VL53L0X_RangingMeasurementData_t measure;
     
 
 
-  //Drive code
-  //als voorkant ver weg is en links dichtbij is
-  if(measure.RangeMilliMeter > 100 && distance < 10) {
-    moveForward();
-    
-    //bijsturen als links dichtbij komt
-    if(distance < 5) {
-      correctRight();
-      
-    }
+//Drive code
+//als voorkant ver weg is en links dichtbij is
+if(measure.RangeMilliMeter > 100 && distance < 15) {
+  moveForward();
+  //bijsturen als links dichtbij komt
+  if(distance < 5) {
+    correctRight();
   }
-  //als voorkant dichtbij is en links ver weg is
-    else if(measure.RangeMilliMeter < 100 && distance > 20) {
-      turnLeft();
-     }
-     else {
-      stopVehicle();
-     }
+}
+//als voorkant dichtbij is en links ver weg is
+else if(measure.RangeMilliMeter < 100 && distance > 20) {
+  turnLeft();
+}
+
+//als voorkant dichtbij is en links dichtbij is
+else if(measure.RangeMilliMeter < 200 && distance < 20) {
+  turnRight();
+}
+  
   
   
 
    
-//  //als voorkant dichtbij is en links dichtbij is
-//  if(measure.RangeMilliMeter < 100 && distance < 10) {
-//    moveBackwards();
-//    turnRight();
-//  }
+  
 //  //als voorkant ver weg is en links ver weg is
 //  if(measure.RangeMilliMeter > 200 && distance > 20) {
 //    moveBackwards();
@@ -179,9 +176,7 @@ void drive(int fL, int fR, int rL, int rR){
  }
 
  void turnRight() {
-   drive(LOW, 180, 180, LOW);
-   delay(50);
-   drive(LOW, 100, 80, LOW);
+   drive(LOW, 160, 120, LOW);
  }
 
  void turnLeft() {
