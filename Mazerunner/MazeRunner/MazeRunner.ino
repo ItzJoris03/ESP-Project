@@ -91,32 +91,59 @@ VL53L0X_RangingMeasurementData_t measure;
     Serial.println(" out of range ");
   }
     
-//if (distance > 10){
+
+
+  //Drive code
+  //als voorkant ver weg is en links dichtbij is
+  if(measure.RangeMilliMeter > 100 && distance < 10) {
+    moveForward();
+    if(distance < 5) {
+      correctRight();
+    }
+  }
+  
+//  //als voorkant dichtbij is en links ver weg is
+//  if(measure.RangeMilliMeter < 100 && distance > 20) {
+//    moveBackwards();
+//    turnLeft();
+//  }
+//  //als voorkant dichtbij is en links dichtbij is
+//  if(measure.RangeMilliMeter < 100 && distance < 10) {
+//    moveBackwards();
+//    turnRight();
+//  }
+//  //als voorkant ver weg is en links ver weg is
+//  if(measure.RangeMilliMeter > 200 && distance > 20) {
+//    moveBackwards();
+//    turnLeft();
+//  }
+  
+
+
+
+
+//if(measure.RangeMilliMeter < 200 ) {
+//  moveBackwards();
+//  turnRight();
+//}else if(distance > 20 && measure.RangeMilliMeter < 200){
 //  turnLeft();
 //}else{
 //  moveForward();
 //}
 
-  //Drive code
-
-if(measure.RangeMilliMeter < 200 ) {
-  stopVehicle();
-  turnRight();
-}else if(distance > 20){
-  turnLeft();
-}else{
-  moveForward();
-}
-
-
-
-//if(measure.RangeMilliMeter < 100){
-//  stopVehicle();
-//  turnRight();
-//}else{
+//if(distance > 20) {
+//  moveBackwards();
+//  turnLeft();
+//}
+//else if(measure.RangeMilliMeter < 200) {
+//  
+//}
+//
+//else{
 //  moveForward();
 //}
-  
+
+
 }
 
 
@@ -133,26 +160,34 @@ void drive(int fL, int fR, int rL, int rR){
 
  void moveForward() {
   drive(180, 180, LOW, LOW);
-  delay(100);
+  delay(50);
   drive(100, 100, LOW, LOW);
 }
 
  void moveBackwards() {
-   drive(LOW, LOW, 200, 200);
+   drive(LOW, LOW, 180, 180);
+   delay(50);
+   drive(LOW, LOW, 100, 100);
  }
 
  void turnRight() {
-   drive(LOW, 180, LOW, LOW);
-   delay(100);
-   drive(LOW, 100, LOW, LOW);
+   drive(LOW, 180, 180, LOW);
+   delay(50);
+   drive(LOW, 100, 80, LOW);
  }
 
  void turnLeft() {
    drive(180, LOW, LOW, 180);
-   delay(100);
-   drive(100, LOW, LOW, 100);
+   delay(50);
+   drive(100, LOW, LOW, 80);
  }
 
  void stopVehicle() {
    drive(LOW, LOW, LOW, LOW);
+ }
+
+ void correctRight() {
+   drive(LOW, 180, 180, LOW);
+   delay(50);
+   drive(LOW, 100, LOW, LOW);
  }
