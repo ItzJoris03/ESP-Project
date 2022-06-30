@@ -4,8 +4,15 @@ class Detect {
 private:
   static const int sensorRight = 34;
   static const int sensorLeft = 39;
+  int avgLeft = 0; 
+  int avgRight = 0; 
 
 public:
+  Detect() {
+    avgRight = Detect::getRight() + 300;
+    avgLeft = Detect::getLeft() + 300;
+  }
+
   static int getLeft() {
     return analogRead(Detect::sensorLeft);
   }
@@ -14,11 +21,11 @@ public:
     return analogRead(Detect::sensorRight);
   }
 
-  static bool checkBlackLeft(){
-    return Detect::getLeft() > 1000;
+  bool checkBlackLeft() {
+    return avgLeft < Detect::getLeft();
   }
 
-  static bool checkBlackRight(){
-    return Detect::getRight() > 3300;
+  bool checkBlackRight() {
+    return avgRight < Detect::getRight();
   }
 };

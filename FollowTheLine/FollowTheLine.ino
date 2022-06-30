@@ -1,210 +1,71 @@
-
 #include "Move.h"
 #include "Sensor.h"
 #include "Display.h" 
 
-int _time = 0;
 int _sync = 20;
-int _speed = 75;
+int _speed = 120;
 
-bool _forward = true;
-bool _backward = false;
+bool _forward = false;
 bool _left = false;
 bool _right = false;
 bool _stop = false;
 
+int _avgLeft = 0;
+int _avgRight = 0;
+
+Detect sensor;
+
 void setup() {
   Move::setup();
+  Display().drawText("Starting...", 1, 0, 0);
 
   Serial.begin(9600);
+  delay(2000);
+
+  for(int i = 0; i != 5; i++) {
+    Display().drawText("Initialize in: " + String((5 - i)), 1, 0, 0);
+    delay(1000);
+  }
+  sensor = Detect();
+  delay(1000);
+
+  Display().drawText("Moving forward", 1, 0, 0);
+  Move::forward(120, _sync);
+  delay(100);
+  Move::forward(_speed, _sync);
 }
 
-void followTheLine(bool hardMode = false) {
-  /*
-   * 
-   * Follow the Line Thin Tapes
-   * 
-   */
-  if(hardMode) {
-    // Check values
-    // while left sensor detects black but right white
-    if(Detect::checkBlackLeft() && !Detect::checkBlackRight()) {
-      _time = 0;
-      
+void followTheLine() {
+  // while left sensor detects black
+  while(true) {
+     if(sensor.checkBlackLeft()) {
       if(!_left) {
-        Move::left(_speed);
-        Display().drawText("Left", 1, 0, 0);
-  
-        _time = 0;
         _left = true;
-        
-        _forward = false;
         _right = false;
-        _stop = false; 
-        _backward = false;
+        _forward = false;
+        _stop = false;
+
+        Move::stop();
+        Move::left(_speed + 30);
+        Display().drawText("Moving left", 1, 0, 0);
       }
     }
-    
-    // while no sensor detects white
-    else if(Detect::checkBlackLeft() && Detect::checkBlackRight()) {
-      if(_time <= 200) {
-        if(!_backward) {
-          Move::backward(_speed, _sync);
-          Display().drawText("Backwards", 1, 0, 0);
-          
-          _backward = true;
-          
-          _left = false; 
-          _forward = false;  
-          _right = false;
-          _stop = false;
-        }
-        _time++;
-      } else {
-        if(!_stop) {
-          Move::stop();
-          Display().drawText("Stop", 1, 0, 0);
-          
-          _stop = true;
-          _backward = true;
-          
-          _left = false;
-          _forward = false;
-          _right = false;
-        }
-      }
-    }
-  
-    // While left sensor detect white but right black
-    else if(!Detect::checkBlackLeft() && Detect::checkBlackRight()) {
-      _time = 0;
-      
+    // while right sensor detects black
+    else if(sensor.checkBlackRight()) {
       if(!_right) {
-        Move::right(_speed);
-        Display().drawText("Right", 1, 0, 0);
-  
-        _right = true;
-        
-        _left = false; 
-        _forward = false;
-        _stop = false;
-        _backward = false;
-      }
-    }
-  
-    // If all conditions are good
-    else {
-      _time = 0;
-      
-      if(!_forward) {
-        Move::forward(_speed, _sync);
-        Display().drawText("Forward", 1, 0, 0);
-  
-        _forward = true;
-        
         _left = false;
-        _right = false;
-        _stop = false;
-        _backward = false;
-      }
-    }
-  /*
-   * 
-   * Follow the Line thick Tapes
-   * 
-   */
-  } else {
-    // Check values
-    // while left sensor detects white but right black
-    if(!Detect::checkBlackLeft() && Detect::checkBlackRight()) {
-      _time = 0;
-      
-      if(!_left) {
-        Move::left(_speed);
-        Display().drawText("Left", 1, 0, 0);
-  
-        _left = true;
-        
-        _forward = false;
-        _right = false;
-        _stop = false; 
-        _backward = false;
-      }
-    }
-    
-    // while no sensor detects black
-    else if(!Detect::checkBlackLeft() && !Detect::checkBlackRight()) {
-      if(_time <= 200) {
-        if(!_backward) {
-          Move::backward(_speed, _sync);
-          Display().drawText("Backwards", 1, 0, 0);
-          
-          _backward = true;
-          
-          _left = false; 
-          _forward = false;  
-          _right = false;
-          _stop = false;
-        }
-        _time++;
-      } else {
-        if(!_stop) {
-          Move::stop();
-          Display().drawText("Stop", 1, 0, 0);
-          
-          _stop = true;
-          _backward = true;
-          
-          _left = false;
-          _forward = false;
-          _right = false;
-        }
-      }
-    }
-  
-    // While left sensor detect black but right white
-    else if(Detect::checkBlackLeft() && !Detect::checkBlackRight()) {
-      _time = 0;
-      
-      if(!_right) {
-        Move::right(_speed);
-        Display().drawText("Right", 1, 0, 0);
-  
         _right = true;
-        
-        _left = false; 
         _forward = false;
         _stop = false;
-        _backward = false;
-      }
-    }
-  
-    // If all conditions are good
-    else {
-      _time = 0;
-      
-      if(!_forward) {
-        Move::forward(_speed, _sync);
-        Display().drawText("Forward", 1, 0, 0);
-  
-        _forward = true;
-        
-        _left = false;
-        _right = false;
-        _stop = false;
-        _backward = false;
+
+        Move::stop();
+        Move::right(_speed + 30);
+        Display().drawText("Moving right", 1, 0, 0);
       }
     }
   }
 }
 
 void loop() {
-  /*Serial.print("left: ");
-  Serial.print(Detect::getLeft());
-  Serial.print(", right: ");
-  Serial.print(Detect::getRight());
-  Serial.println();*/
-
   followTheLine();
-  Serial.println("Time: " + String(_time));
 }
