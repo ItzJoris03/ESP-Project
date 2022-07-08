@@ -1,6 +1,3 @@
-  //This code makes the robot drive over thin lines. 
- // On the display the values that the LDR picks up will be shown. These values are used to see if the robot follows the line. 
-
  #include <Arduino.h>
  #include <analogWrite.h>
  #include <Adafruit_SSD1306.h>
@@ -25,14 +22,7 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
  int distance;
  
  void setup() {
-
-   
-  
    Serial.begin(9600);
-
-
-   // Show initial display buffer contents on the screen --
-   // the library initializes this with an Adafruit splash screen.
 
    pinMode(forwardLeft, OUTPUT);
    pinMode(forwardRight, OUTPUT);
@@ -117,14 +107,9 @@ VL53L0X_RangingMeasurementData_t measure;
     turnLeft();
   }  
   
-
-
 }
 
-
-
-
- // These are the functions that are used in the code above.
+ // Functies van drive die hierboven gebruikt worden
 
 void drive(int fL, int fR, int rL, int rR){
   analogWrite(forwardLeft, fL);
