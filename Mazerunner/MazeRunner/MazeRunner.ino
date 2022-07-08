@@ -92,15 +92,6 @@ VL53L0X_RangingMeasurementData_t measure;
   }
     
 
-
-//if(measure.RangeMilliMeter > 100 && distance > 5) {
-//  driveLeft();
-//}else if(measure.RangeMilliMeter > 100 && distance < 5) {
-//  driveRight();
-//}else{
-//  stopVehicle();
-//}
-
 //Drive code
 //als voorkant ver weg is en links dichtbij is
   if(measure.RangeMilliMeter > 100 && distance < 15) {
